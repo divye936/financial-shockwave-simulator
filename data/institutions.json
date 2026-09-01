@@ -1,0 +1,16 @@
+{
+  "nodes": [
+    { "id": "CB_01", "name": "Central Reserve", "type": "Central Bank", "total_assets": 1000000, "capital_buffer": 500000, "leverage_ratio": 2.0, "status": "Healthy" },
+    { "id": "T1_01", "name": "Global Horizon Bank", "type": "Tier-1 Bank", "total_assets": 85000, "capital_buffer": 8500, "leverage_ratio": 10.0, "status": "Healthy" },
+    { "id": "T1_02", "name": "Apex Financial", "type": "Tier-1 Bank", "total_assets": 62000, "capital_buffer": 5000, "leverage_ratio": 12.4, "status": "Healthy" },
+    { "id": "RB_01", "name": "Valley Regional Bank", "type": "Regional Bank", "total_assets": 15000, "capital_buffer": 1200, "leverage_ratio": 12.5, "status": "Healthy" },
+    { "id": "TF_01", "name": "Innovate Tech Fund", "type": "Corporate Fund", "total_assets": 5000, "capital_buffer": 800, "leverage_ratio": 6.25, "status": "Healthy" }
+  ],
+  "edges": [
+    { "creditor": "CB_01", "debtor": "T1_01", "exposure_amount": 15000, "instrument": "Liquidity Facility" },
+    { "creditor": "T1_01", "debtor": "T1_02", "exposure_amount": 8000, "instrument": "Interbank Loan" },
+    { "creditor": "T1_02", "debtor": "RB_01", "exposure_amount": 4500, "instrument": "Interbank Loan" },
+    { "creditor": "RB_01", "debtor": "TF_01", "exposure_amount": 3000, "instrument": "Corporate Line of Credit" },
+    { "creditor": "TF_01", "debtor": "T1_01", "exposure_amount": 2000, "instrument": "Corporate Bonds" }
+  ]
+}
