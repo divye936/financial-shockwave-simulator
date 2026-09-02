@@ -30,6 +30,11 @@ class ContagionEngine:
         self.G = graph
         self.timeline = []  # list of deep-copied graph snapshots
         self.event_log = []  # human-readable log of what happened at each step
+        # Structured record of each shock/write-down, aligned so that
+        # structured_log[i] corresponds to the transition INTO
+        # event_log[i + 1] (event_log[0] is just the pre-shock baseline).
+        # Lets the UI know exactly which edge to animate money flowing along.
+        self.structured_log = []
 
     # ------------------------------------------------------------------
     # State recording
@@ -71,6 +76,9 @@ class ContagionEngine:
         data["capital_buffer"] -= loss
         self._update_status(node_id)
 
+        self.structured_log.append({
+            "type": "shock", "node": node_id, "amount": loss, "from": None, "to": node_id,
+        })
         self._record_state(
             f"T+0: Shock applied to {data['name']} ({node_id}) — "
             f"{shock_pct*100:.0f}% capital loss (-{loss:,.0f})"
@@ -123,6 +131,10 @@ class ContagionEngine:
                         f"{creditor_data['name']} writes down {write_down:,.0f} "
                         f"({prev_status} -> {creditor_data['status']})"
                     )
+                    self.structured_log.append({
+                        "type": "writedown", "node": creditor_id, "amount": write_down,
+                        "from": defaulted_node, "to": creditor_id,
+                    })
                     self._record_state(self.event_log_note)
 
                 any_change = True
@@ -147,3 +159,6 @@ class ContagionEngine:
 
     def get_event_log(self) -> list:
         return self.event_log
+
+    def get_structured_log(self) -> list:
+        return self.structured_log
